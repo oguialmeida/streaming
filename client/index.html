@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Streaming Service</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Video Streaming Service</h1>
+  
+  <h2>Contents</h2>
+  <ul id="contents-list"></ul>
+  
+  <h2>Actors</h2>
+  <ul id="actors-list"></ul>
+  
+  <h2>Users</h2>
+  <ul id="users-list"></ul>
+  
+  <script>
+    async function fetchData(endpoint) {
+      const response = await fetch(`http://localhost:5000/api/${endpoint}`);
+      return response.json();
+    }
+    
+    function createListItem(text) {
+      const li = document.createElement('li');
+      li.textContent = text;
+      return li;
+    }
+
+    async function loadContents() {
+      const contents = await fetchData('contents');
+      const contentsList = document.getElementById('contents-list');
+      contents.forEach(content => {
+        const listItem = createListItem(`${content.title} - ${content.category}`);
+        contentsList.appendChild(listItem);
+      });
+    }
+
+    async function loadActors() {
+      const actors = await fetchData('actors');
+      const actorsList = document.getElementById('actors-list');
+      actors.forEach(actor => {
+        const listItem = createListItem(`${actor.name} - ${actor.realName}`);
+        actorsList.appendChild(listItem);
+      });
+    }
+
+    async function loadUsers() {
+      const users = await fetchData('users');
+      const usersList = document.getElementById('users-list');
+      users.forEach(user => {
+        const listItem = createListItem(user.name);
+        usersList.appendChild(listItem);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadContents();
+      loadActors();
+      loadUsers();
+    });
+  </script>
+</body>
+</html>
